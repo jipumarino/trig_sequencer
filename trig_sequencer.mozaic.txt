@@ -1,0 +1,208 @@
+@OnLoad
+  ShowLayout 1
+  SetMetroSwing 0
+
+  SetMetroPPQN 384
+
+  LabelKnobs { }
+
+  if Unassigned notes
+    for knob = 0 to 7
+      noteVal = 64
+      Call @MySetNoteKnob
+    endfor
+  else
+    for knob = 0 to 7
+      noteVal = notes[knob]
+      Call @MySetNoteKnob
+    endfor    
+  endif
+
+  if Unassigned maxStep
+    LabelKnob 10, {Length:8} 
+    SetKnobValue 10, 127
+    maxStep = 8
+  else
+    LabelKnob 10, {Length:}, maxStep
+    SetKnobValue 10, (maxStep - 2) / 6 * 127
+  endif   
+
+  lastStep = -1
+  newStep = -1
+
+  if Unassigned trigs
+    for knob = 11 to 13
+      LabelKnob knob, {T}, knob-10, {⚫️}, {-}
+      SetKnobValue knob, 0
+      trigs[knob-11] = 0
+    endfor
+  else
+    for knob = 11 to 13
+      trigVal = trigs[knob-11]
+      SetKnobValue knob, trigVal / 16 * 127
+      if trigVal = 0
+        LabelKnob knob, {T}, knob-10, {⚫️}, {-}
+      else
+        LabelKnob knob, {T}, knob-10, {⚫️}, {1/}, trigVal
+      endif
+    endfor    
+  endif
+
+  LabelKnob 8, { }
+  SetKnobValue 8, 0
+  LabelKnob 9, { }
+  SetKnobValue 9, 0
+  LabelKnob 14, { }
+  SetKnobValue 14, 0
+  LabelKnob 15, { }
+  SetKnobValue 15, 0
+  LabelKnob 16, { }
+  SetKnobValue 16, 0
+  LabelKnob 17, { }
+  SetKnobValue 17, 0
+  LabelKnob 18, { }
+  SetKnobValue 18, 0
+  LabelKnob 19, { }
+  SetKnobValue 19, 0
+  LabelKnob 20, { }
+  SetKnobValue 20, 0
+  LabelKnob 21, { }
+  SetKnobValue 21, 0
+
+@End
+
+@OnKnobChange
+  knob = LastKnob
+  knobVal = (GetKnobValue knob)
+
+  if knob >= 0 and knob <= 7
+    noteVal = Round(knobVal)
+    Call @MySetNoteKnob
+  elseif knob = 8 or knob = 9 or knob = 14 or knob = 15 or knob = 16 or knob = 17 or knob = 18 or knob = 19 or knob = 20 or knob = 21
+    SetKnobValue knob, 0
+  elseif knob = 10
+    maxStep = Round(knobVal / 127 * 6) + 2
+    LabelKnob knob, {Length:}, maxStep
+  elseif knob >= 11 and knob <= 13
+    trigVal = Round(knobVal / 127 * 16)
+    trigs[knob-11] = trigVal
+    if trigVal = 0
+      LabelKnob knob, {T}, knob-10, {⚫️}, {-}
+    else
+      LabelKnob knob, {T}, knob-10, {⚫️}, {1/}, trigVal
+    endif
+  endif
+@End
+
+@OnMetroPulse
+  addStep = 0
+  p = CurrentMetroPulse
+  for i = 0 to 2
+    v = trigs[i]
+    if v=1 and (p=0)
+      Inc addStep
+      LabelKnob i+11, {T}, i+1, {🔴}, {1/}, v
+    elseif v=1 and (p=48)
+      LabelKnob i+11, {T}, i+1, {⚫️}, {1/}, v
+    elseif v=2 and (p=0 or p=768)
+      Inc addStep
+      LabelKnob i+11, {T}, i+1, {🔴}, {1/}, v
+    elseif v=2 and (p=48 or p=816)
+      LabelKnob i+11, {T}, i+1, {⚫️}, {1/}, v
+    elseif v=3 and (p=0 or p=512 or p=1024)
+      Inc addStep
+      LabelKnob i+11, {T}, i+1, {🔴}, {1/}, v
+    elseif v=3 and (p=48 or p=560 or p=1072)
+      LabelKnob i+11, {T}, i+1, {⚫️}, {1/}, v
+    elseif v=4 and (p=0 or p=384 or p=768 or p=1152)
+      Inc addStep
+      LabelKnob i+11, {T}, i+1, {🔴}, {1/}, v
+    elseif v=4 and (p=48 or p=432 or p=816 or p=1200)
+      LabelKnob i+11, {T}, i+1, {⚫️}, {1/}, v
+    elseif v=5 and (p=0 or p=307 or p=614 or p=922 or p=1229)
+      Inc addStep
+      LabelKnob i+11, {T}, i+1, {🔴}, {1/}, v
+    elseif v=5 and (p=48 or p=355 or p=662 or p=970 or p=1277)
+      LabelKnob i+11, {T}, i+1, {⚫️}, {1/}, v
+    elseif v=6 and (p=0 or p=256 or p=512 or p=768 or p=1024 or p=1280)
+      Inc addStep
+      LabelKnob i+11, {T}, i+1, {🔴}, {1/}, v
+    elseif v=6 and (p=48 or p=304 or p=560 or p=816 or p=1072 or p=1328)
+      LabelKnob i+11, {T}, i+1, {⚫️}, {1/}, v
+    elseif v=7 and (p=0 or p=219 or p=439 or p=658 or p=878 or p=1097 or p=1317 or p=1536)
+      Inc addStep
+      LabelKnob i+11, {T}, i+1, {🔴}, {1/}, v
+    elseif v=7 and (p=48 or p=267 or p=487 or p=706 or p=926 or p=1145 or p=1365 or p=1584)
+      LabelKnob i+11, {T}, i+1, {⚫️}, {1/}, v
+    elseif v=8 and (p=0 or p=192 or p=384 or p=576 or p=768 or p=960 or p=1152 or p=1344)
+      Inc addStep
+      LabelKnob i+11, {T}, i+1, {🔴}, {1/}, v
+    elseif v=8 and (p=48 or p=240 or p=432 or p=624 or p=816 or p=1008 or p=1200 or p=1392)
+      LabelKnob i+11, {T}, i+1, {⚫️}, {1/}, v
+    elseif v=9 and (p=0 or p=171 or p=341 or p=512 or p=683 or p=853 or p=1024 or p=1195 or p=1365)
+      Inc addStep
+      LabelKnob i+11, {T}, i+1, {🔴}, {1/}, v
+    elseif v=9 and (p=48 or p=219 or p=389 or p=560 or p=731 or p=901 or p=1072 or p=1243 or p=1413)
+      LabelKnob i+11, {T}, i+1, {⚫️}, {1/}, v
+    elseif v=10 and (p=0 or p=154 or p=307 or p=461 or p=614 or p=768 or p=922 or p=1075 or p=1229 or p=1382 or p=1536)
+      Inc addStep
+      LabelKnob i+11, {T}, i+1, {🔴}, {1/}, v
+    elseif v=10 and (p=48 or p=202 or p=355 or p=509 or p=662 or p=816 or p=970 or p=1123 or p=1277 or p=1430 or p=1584)
+      LabelKnob i+11, {T}, i+1, {⚫️}, {1/}, v
+    elseif v=11 and (p=0 or p=140 or p=279 or p=419 or p=559 or p=698 or p=838 or p=977 or p=1117 or p=1257 or p=1396 or p=1536)
+      Inc addStep
+      LabelKnob i+11, {T}, i+1, {🔴}, {1/}, v
+    elseif v=11 and (p=48 or p=188 or p=327 or p=467 or p=607 or p=746 or p=886 or p=1025 or p=1165 or p=1305 or p=1444 or p=1584)
+      LabelKnob i+11, {T}, i+1, {⚫️}, {1/}, v
+    elseif v=12 and (p=0 or p=128 or p=256 or p=384 or p=512 or p=640 or p=768 or p=896 or p=1024 or p=1152 or p=1280 or p=1408)
+      Inc addStep
+      LabelKnob i+11, {T}, i+1, {🔴}, {1/}, v
+    elseif v=12 and (p=48 or p=176 or p=304 or p=432 or p=560 or p=688 or p=816 or p=944 or p=1072 or p=1200 or p=1328 or p=1456)
+      LabelKnob i+11, {T}, i+1, {⚫️}, {1/}, v
+    elseif v=13 and (p=0 or p=118 or p=236 or p=354 or p=473 or p=591 or p=709 or p=827 or p=945 or p=1063 or p=1182 or p=1300 or p=1418)
+      Inc addStep
+      LabelKnob i+11, {T}, i+1, {🔴}, {1/}, v
+    elseif v=13 and (p=48 or p=166 or p=284 or p=402 or p=521 or p=639 or p=757 or p=875 or p=993 or p=1111 or p=1230 or p=1348 or p=1466)
+      LabelKnob i+11, {T}, i+1, {⚫️}, {1/}, v
+    elseif v=14 and (p=0 or p=110 or p=219 or p=329 or p=439 or p=549 or p=658 or p=768 or p=878 or p=987 or p=1097 or p=1207 or p=1317 or p=1426)
+      Inc addStep
+      LabelKnob i+11, {T}, i+1, {🔴}, {1/}, v
+    elseif v=14 and (p=48 or p=158 or p=267 or p=377 or p=487 or p=597 or p=706 or p=816 or p=926 or p=1035 or p=1145 or p=1255 or p=1365 or p=1474)
+      LabelKnob i+11, {T}, i+1, {⚫️}, {1/}, v
+    elseif v=15 and (p=0 or p=102 or p=205 or p=307 or p=410 or p=512 or p=614 or p=717 or p=819 or p=922 or p=1024 or p=1126 or p=1229 or p=1331 or p=1434)
+      Inc addStep
+      LabelKnob i+11, {T}, i+1, {🔴}, {1/}, v
+    elseif v=15 and (p=48 or p=150 or p=253 or p=355 or p=458 or p=560 or p=662 or p=765 or p=867 or p=970 or p=1072 or p=1174 or p=1277 or p=1379 or p=1482)
+      LabelKnob i+11, {T}, i+1, {⚫️}, {1/}, v
+    elseif v=16 and (p=0 or p=96 or p=192 or p=288 or p=384 or p=480 or p=576 or p=672 or p=768 or p=864 or p=960 or p=1056 or p=1152 or p=1248 or p=1344 or p=1440)
+      Inc addStep
+      LabelKnob i+11, {T}, i+1, {🔴}, {1/}, v
+    elseif v=16 and (p=48 or p=144 or p=240 or p=336 or p=432 or p=528 or p=624 or p=720 or p=816 or p=912 or p=1008 or p=1104 or p=1200 or p=1296 or p=1392 or p=1488)
+      LabelKnob i+11, {T}, i+1, {⚫️}, {1/}, v
+    endif
+  endfor
+
+  if addStep > 0
+    newStep = (lastStep + addStep) % maxStep
+    Call @MySetNewStep
+  endif
+@End
+
+@MySetNoteKnob
+  LabelKnob knob, {S}, knob+1, {⚫️}, (NoteName noteVal, YES)
+  notes[knob] = noteVal
+@End
+
+@MySetNewStep
+  SendMIDINoteOn 0, notes[newStep], 100
+  SendMIDINoteOff 0, notes[newStep], 0, 1
+
+  note = notes[newStep]
+  LabelKnob newStep, {S}, newStep+1, {🔴}, (NoteName note, YES)
+  if lastStep > -1
+    note = notes[lastStep]
+    LabelKnob lastStep, {S}, lastStep+1, {⚫️}, (NoteName note, YES)
+  endif
+
+  lastStep = newStep
+@End
