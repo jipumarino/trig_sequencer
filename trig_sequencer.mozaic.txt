@@ -231,6 +231,7 @@
   if ShiftPressed 
     noteVal = MIDINote
     knob = recStep
+    SetKnobValue knob, noteVal 
     call @MySetNoteKnob
     recStep = (recStep + 1) % 8
   endif 
