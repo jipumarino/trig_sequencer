@@ -222,3 +222,16 @@
     lastStep = newStep
   endif
 @End
+
+@OnShiftDown
+  recStep = 0
+@End 
+
+@OnMidiNoteOn
+  if ShiftPressed 
+    noteVal = MIDINote
+    knob = recStep
+    call @MySetNoteKnob
+    recStep = (recStep + 1) % 8
+  endif 
+@End 
