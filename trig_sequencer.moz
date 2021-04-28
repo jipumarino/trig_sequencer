@@ -2,7 +2,8 @@
   ShowLayout 1
   SetMetroSwing 0
 
-  SetMetroPPQN 384
+  ppqn = 384
+  SetMetroPPQN ppqn
 
   LabelKnobs { }
 
@@ -109,14 +110,6 @@
   endif
 @End
 
-@MyAddPulse
-  if pulse < 1000
-    Inc pulses1[pulse]
-  else
-    Inc pulses2[pulse-1000]
-  endif
-@End
-
 @MySetAllPulses
   for i = 0 to 1000
     pulses1[i] = 0
@@ -125,294 +118,18 @@
 
   for i = 0 to 2
     v = trigs[i]
-    if v = 1
-      pulse = 0
-      call @MyAddPulse
-    elseif v = 2
-      pulse = 0
-      call @MyAddPulse
-      pulse = 768
-      call @MyAddPulse
-    elseif v = 3
-      pulse = 0
-      call @MyAddPulse
-      pulse = 512
-      call @MyAddPulse
-      pulse = 1024
-      call @MyAddPulse
-    elseif v = 4
-      pulse = 0
-      call @MyAddPulse
-      pulse = 384
-      call @MyAddPulse
-      pulse = 768
-      call @MyAddPulse
-      pulse = 1152
-      call @MyAddPulse
-    elseif v = 5
-      pulse = 0
-      call @MyAddPulse
-      pulse = 307
-      call @MyAddPulse
-      pulse = 614
-      call @MyAddPulse
-      pulse = 922
-      call @MyAddPulse
-      pulse = 1229
-      call @MyAddPulse
-    elseif v = 6
-      pulse = 0
-      call @MyAddPulse
-      pulse = 256
-      call @MyAddPulse
-      pulse = 512
-      call @MyAddPulse
-      pulse = 768
-      call @MyAddPulse
-      pulse = 1024
-      call @MyAddPulse
-      pulse = 1280
-      call @MyAddPulse
-    elseif v = 7
-      pulse = 0
-      call @MyAddPulse
-      pulse = 219
-      call @MyAddPulse
-      pulse = 439
-      call @MyAddPulse
-      pulse = 658
-      call @MyAddPulse
-      pulse = 878
-      call @MyAddPulse
-      pulse = 1097
-      call @MyAddPulse
-      pulse = 1317
-      call @MyAddPulse
-    elseif v = 8
-      pulse = 0
-      call @MyAddPulse
-      pulse = 192
-      call @MyAddPulse
-      pulse = 384
-      call @MyAddPulse
-      pulse = 576
-      call @MyAddPulse
-      pulse = 768
-      call @MyAddPulse
-      pulse = 960
-      call @MyAddPulse
-      pulse = 1152
-      call @MyAddPulse
-      pulse = 1344
-      call @MyAddPulse
-    elseif v = 9
-      pulse = 0
-      call @MyAddPulse
-      pulse = 171
-      call @MyAddPulse
-      pulse = 341
-      call @MyAddPulse
-      pulse = 512
-      call @MyAddPulse
-      pulse = 683
-      call @MyAddPulse
-      pulse = 853
-      call @MyAddPulse
-      pulse = 1024
-      call @MyAddPulse
-      pulse = 1195
-      call @MyAddPulse
-      pulse = 1365
-      call @MyAddPulse
-    elseif v = 10
-      pulse = 0
-      call @MyAddPulse
-      pulse = 154
-      call @MyAddPulse
-      pulse = 307
-      call @MyAddPulse
-      pulse = 461
-      call @MyAddPulse
-      pulse = 614
-      call @MyAddPulse
-      pulse = 768
-      call @MyAddPulse
-      pulse = 922
-      call @MyAddPulse
-      pulse = 1075
-      call @MyAddPulse
-      pulse = 1229
-      call @MyAddPulse
-      pulse = 1382
-      call @MyAddPulse
-    elseif v = 11
-      pulse = 0
-      call @MyAddPulse
-      pulse = 140
-      call @MyAddPulse
-      pulse = 279
-      call @MyAddPulse
-      pulse = 419
-      call @MyAddPulse
-      pulse = 559
-      call @MyAddPulse
-      pulse = 698
-      call @MyAddPulse
-      pulse = 838
-      call @MyAddPulse
-      pulse = 977
-      call @MyAddPulse
-      pulse = 1117
-      call @MyAddPulse
-      pulse = 1257
-      call @MyAddPulse
-      pulse = 1396
-      call @MyAddPulse
-    elseif v = 12
-      pulse = 0
-      call @MyAddPulse
-      pulse = 128
-      call @MyAddPulse
-      pulse = 256
-      call @MyAddPulse
-      pulse = 384
-      call @MyAddPulse
-      pulse = 512
-      call @MyAddPulse
-      pulse = 640
-      call @MyAddPulse
-      pulse = 768
-      call @MyAddPulse
-      pulse = 896
-      call @MyAddPulse
-      pulse = 1024
-      call @MyAddPulse
-      pulse = 1152
-      call @MyAddPulse
-      pulse = 1280
-      call @MyAddPulse
-      pulse = 1408
-      call @MyAddPulse
-    elseif v = 13
-      pulse = 0
-      call @MyAddPulse
-      pulse = 118
-      call @MyAddPulse
-      pulse = 236
-      call @MyAddPulse
-      pulse = 354
-      call @MyAddPulse
-      pulse = 473
-      call @MyAddPulse
-      pulse = 591
-      call @MyAddPulse
-      pulse = 709
-      call @MyAddPulse
-      pulse = 827
-      call @MyAddPulse
-      pulse = 945
-      call @MyAddPulse
-      pulse = 1063
-      call @MyAddPulse
-      pulse = 1182
-      call @MyAddPulse
-      pulse = 1300
-      call @MyAddPulse
-      pulse = 1418
-      call @MyAddPulse
-    elseif v = 14
-      pulse = 0
-      call @MyAddPulse
-      pulse = 110
-      call @MyAddPulse
-      pulse = 219
-      call @MyAddPulse
-      pulse = 329
-      call @MyAddPulse
-      pulse = 439
-      call @MyAddPulse
-      pulse = 549
-      call @MyAddPulse
-      pulse = 658
-      call @MyAddPulse
-      pulse = 768
-      call @MyAddPulse
-      pulse = 878
-      call @MyAddPulse
-      pulse = 987
-      call @MyAddPulse
-      pulse = 1097
-      call @MyAddPulse
-      pulse = 1207
-      call @MyAddPulse
-      pulse = 1317
-      call @MyAddPulse
-      pulse = 1426
-      call @MyAddPulse
-    elseif v = 15
-      pulse = 0
-      call @MyAddPulse
-      pulse = 102
-      call @MyAddPulse
-      pulse = 205
-      call @MyAddPulse
-      pulse = 307
-      call @MyAddPulse
-      pulse = 410
-      call @MyAddPulse
-      pulse = 512
-      call @MyAddPulse
-      pulse = 614
-      call @MyAddPulse
-      pulse = 717
-      call @MyAddPulse
-      pulse = 819
-      call @MyAddPulse
-      pulse = 922
-      call @MyAddPulse
-      pulse = 1024
-      call @MyAddPulse
-      pulse = 1126
-      call @MyAddPulse
-      pulse = 1229
-      call @MyAddPulse
-      pulse = 1331
-      call @MyAddPulse
-      pulse = 1434
-      call @MyAddPulse
-    elseif v = 16
-      pulse = 0
-      call @MyAddPulse
-      pulse = 96
-      call @MyAddPulse
-      pulse = 192
-      call @MyAddPulse
-      pulse = 288
-      call @MyAddPulse
-      pulse = 384
-      call @MyAddPulse
-      pulse = 480
-      call @MyAddPulse
-      pulse = 576
-      call @MyAddPulse
-      pulse = 672
-      call @MyAddPulse
-      pulse = 768
-      call @MyAddPulse
-      pulse = 864
-      call @MyAddPulse
-      pulse = 960
-      call @MyAddPulse
-      pulse = 1056
-      call @MyAddPulse
-      pulse = 1152
-      call @MyAddPulse
-      pulse = 1248
-      call @MyAddPulse
-      pulse = 1344
-      call @MyAddPulse
-      pulse = 1440
-      call @MyAddPulse
+    if v > 0
+      increment = ppqn * 4 / v
+      floatPulse = 0.0
+      while floatPulse < ppqn * 4
+        pulse = Round floatPulse
+        if pulse < 1000
+          Inc pulses1[pulse]
+        else
+          Inc pulses2[pulse-1000]
+        endif
+        floatPulse = floatPulse + increment
+      endwhile
     endif
   endfor
 @End
