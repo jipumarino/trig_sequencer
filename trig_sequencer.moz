@@ -125,22 +125,22 @@
 
   for i = 0 to 2
     v = trigs[i]
-    if v=1
+    if v = 1
       pulse = 0
       call @MyAddPulse
-    elseif v=2
+    elseif v = 2
       pulse = 0
       call @MyAddPulse
       pulse = 768
       call @MyAddPulse
-    elseif v=3
+    elseif v = 3
       pulse = 0
       call @MyAddPulse
       pulse = 512
       call @MyAddPulse
       pulse = 1024
       call @MyAddPulse
-    elseif v=4
+    elseif v = 4
       pulse = 0
       call @MyAddPulse
       pulse = 384
@@ -149,7 +149,7 @@
       call @MyAddPulse
       pulse = 1152
       call @MyAddPulse
-    elseif v=5
+    elseif v = 5
       pulse = 0
       call @MyAddPulse
       pulse = 307
@@ -160,7 +160,7 @@
       call @MyAddPulse
       pulse = 1229
       call @MyAddPulse
-    elseif v=6
+    elseif v = 6
       pulse = 0
       call @MyAddPulse
       pulse = 256
@@ -173,7 +173,7 @@
       call @MyAddPulse
       pulse = 1280
       call @MyAddPulse
-    elseif v=7
+    elseif v = 7
       pulse = 0
       call @MyAddPulse
       pulse = 219
@@ -188,7 +188,7 @@
       call @MyAddPulse
       pulse = 1317
       call @MyAddPulse
-    elseif v=8
+    elseif v = 8
       pulse = 0
       call @MyAddPulse
       pulse = 192
@@ -205,7 +205,7 @@
       call @MyAddPulse
       pulse = 1344
       call @MyAddPulse
-    elseif v=9
+    elseif v = 9
       pulse = 0
       call @MyAddPulse
       pulse = 171
@@ -224,7 +224,7 @@
       call @MyAddPulse
       pulse = 1365
       call @MyAddPulse
-    elseif v=10
+    elseif v = 10
       pulse = 0
       call @MyAddPulse
       pulse = 154
@@ -245,7 +245,7 @@
       call @MyAddPulse
       pulse = 1382
       call @MyAddPulse
-    elseif v=11
+    elseif v = 11
       pulse = 0
       call @MyAddPulse
       pulse = 140
@@ -268,7 +268,7 @@
       call @MyAddPulse
       pulse = 1396
       call @MyAddPulse
-    elseif v=12
+    elseif v = 12
       pulse = 0
       call @MyAddPulse
       pulse = 128
@@ -293,7 +293,7 @@
       call @MyAddPulse
       pulse = 1408
       call @MyAddPulse
-    elseif v=13
+    elseif v = 13
       pulse = 0
       call @MyAddPulse
       pulse = 118
@@ -320,7 +320,7 @@
       call @MyAddPulse
       pulse = 1418
       call @MyAddPulse
-    elseif v=14
+    elseif v = 14
       pulse = 0
       call @MyAddPulse
       pulse = 110
@@ -349,7 +349,7 @@
       call @MyAddPulse
       pulse = 1426
       call @MyAddPulse
-    elseif v=15
+    elseif v = 15
       pulse = 0
       call @MyAddPulse
       pulse = 102
@@ -380,7 +380,7 @@
       call @MyAddPulse
       pulse = 1434
       call @MyAddPulse
-    elseif v=16
+    elseif v = 16
       pulse = 0
       call @MyAddPulse
       pulse = 96

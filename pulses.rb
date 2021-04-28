@@ -37,4 +37,7 @@ puts "    endif"
 puts "  endfor"
 puts "@End"
 
-puts "\n\n\n----------------------------------\nMax diff: #{total_max_diff*1000} milliseconds"
+puts "\n\n\n----------------------------------"
+puts "BPM: #{bpm}"
+puts "PPQN: #{ppqn}"
+puts "Max diff: #{(total_max_diff*1000).round(2)} milliseconds"
