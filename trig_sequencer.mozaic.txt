@@ -58,8 +58,9 @@
         LabelKnob knob, {1/}, trigVal
       endif
     endfor
-    Call @MySetAllPulses
   endif
+  
+  Call @MySetAllPulses
 
   LabelKnob 8, { }
   SetKnobValue 8, 0
@@ -130,7 +131,7 @@
     elseif v=2
       pulse = 0
       call @MyAddPulse
-      pulse = 768)
+      pulse = 768
       call @MyAddPulse
     elseif v=3
       pulse = 0
