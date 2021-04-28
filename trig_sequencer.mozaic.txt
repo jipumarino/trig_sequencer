@@ -188,8 +188,6 @@
       call @MyAddPulse
       pulse = 1317
       call @MyAddPulse
-      pulse = 1536
-      call @MyAddPulse
     elseif v=8
       pulse = 0
       call @MyAddPulse
@@ -247,8 +245,6 @@
       call @MyAddPulse
       pulse = 1382
       call @MyAddPulse
-      pulse = 1536
-      call @MyAddPulse
     elseif v=11
       pulse = 0
       call @MyAddPulse
@@ -271,8 +267,6 @@
       pulse = 1257
       call @MyAddPulse
       pulse = 1396
-      call @MyAddPulse
-      pulse = 1536
       call @MyAddPulse
     elseif v=12
       pulse = 0
