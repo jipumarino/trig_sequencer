@@ -96,9 +96,9 @@
     trigVal = Round(knobVal / 127 * 16)
     trigs[knob-11] = trigVal
     if trigVal = 0
-      LabelKnob knob, {⚫️}, {-}
+      LabelKnob knob, {-}
     else
-      LabelKnob knob, {⚫️}, {1/}, trigVal
+      LabelKnob knob, {1/}, trigVal
     endif
     Call @MySetAllPulses    
   elseif knob = 14
@@ -448,7 +448,6 @@
 
 @MySetNewStep
   note = notes[newStep] 
-  FlashUserLed
   SendMIDINoteOn 0, note, 100
   SendMIDINoteOff 0, note, 0, gateLength
 
@@ -472,4 +471,4 @@
     call @MySetNoteKnob
     recStep = (recStep + 1) % 8
   endif 
-@End 
+@End
