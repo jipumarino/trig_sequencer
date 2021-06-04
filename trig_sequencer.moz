@@ -20,7 +20,7 @@
       noteVal = notes[knob]
       Call @MySetNoteKnob
       knob = knob + 11
-      noteVal = notes[knob]
+      noteVal = notes[knob-3]
       Call @MySetNoteKnob
     endfor    
   endif
