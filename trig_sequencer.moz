@@ -3,55 +3,61 @@
   SetMetroSwing 0
 
   ppqn = 384
+
   SetMetroPPQN ppqn
 
   LabelKnobs { }
 
   if Unassigned notes
+    noteVal = 64
     for knob = 0 to 7
-      noteVal = 64
+      Call @MySetNoteKnob
+      knob = knob + 11
       Call @MySetNoteKnob
     endfor
   else
     for knob = 0 to 7
       noteVal = notes[knob]
       Call @MySetNoteKnob
+      knob = knob + 11
+      noteVal = notes[knob]
+      Call @MySetNoteKnob
     endfor    
   endif
 
   if Unassigned maxStep
-    LabelKnob 10, {Length:8} 
-    SetKnobValue 10, 127
-    maxStep = 8
+    LabelKnob 8, {Length:16} 
+    SetKnobValue 8, 127
+    maxStep = 16
   else
-    LabelKnob 10, {Length:}, maxStep
-    SetKnobValue 10, (maxStep - 2) / 6 * 127
+    LabelKnob 8, {Length:}, maxStep
+    SetKnobValue 8, (maxStep - 2) / 14 * 127
   endif
 
   if Unassigned mutateProb
     mutateProb = 0
   endif   
-  LabelKnob 14, {Mutate}
-  SetKnobValue 14, mutateProb 
+  LabelKnob 9, {Mutate}
+  SetKnobValue 9, mutateProb 
   
   if Unassigned gateLength
     gateLength = 1
   endif   
-  LabelKnob 15, {Gate}
-  SetKnobValue 15, (gateLength - 1)/500 * 127
+  LabelKnob 10, {Gate}
+  SetKnobValue 10, (gateLength - 1)/500 * 127
 
   lastStep = maxStep - 1
   newStep = -1
 
   if Unassigned trigs
-    for knob = 11 to 13
+    for knob = 19 to 21
       LabelKnob knob, {-}
       SetKnobValue knob, 0
-      trigs[knob-11] = 0
+      trigs[knob-19] = 0
     endfor
   else
-    for knob = 11 to 13
-      trigVal = trigs[knob-11]
+    for knob = 19 to 21
+      trigVal = trigs[knob-19]
       SetKnobValue knob, trigVal / 16 * 127
       if trigVal = 0
         LabelKnob knob, {-}
@@ -62,51 +68,31 @@
   endif
   
   Call @MySetAllPulses
-
-  LabelKnob 8, { }
-  SetKnobValue 8, 0
-  LabelKnob 9, { }
-  SetKnobValue 9, 0
-  LabelKnob 16, { }
-  SetKnobValue 16, 0
-  LabelKnob 17, { }
-  SetKnobValue 17, 0
-  LabelKnob 18, { }
-  SetKnobValue 18, 0
-  LabelKnob 19, { }
-  SetKnobValue 19, 0
-  LabelKnob 20, { }
-  SetKnobValue 20, 0
-  LabelKnob 21, { }
-  SetKnobValue 21, 0
-
 @End
 
 @OnKnobChange
   knob = LastKnob
   knobVal = (GetKnobValue knob)
 
-  if knob >= 0 and knob <= 7
+  if (knob >= 0 and knob <= 7) or (knob >= 11 and knob <= 18)
     noteVal = Round(knobVal)
     Call @MySetNoteKnob
-  elseif knob = 8 or knob = 9 or knob = 16 or knob = 17 or knob = 18 or knob = 19 or knob = 20 or knob = 21
-    SetKnobValue knob, 0
-  elseif knob = 10
-    maxStep = Round(knobVal / 127 * 6) + 2
+  elseif knob = 8
+    maxStep = Round(knobVal / 127 * 14) + 2
     LabelKnob knob, {Length:}, maxStep
-  elseif knob >= 11 and knob <= 13
+  elseif knob = 9
+    mutateProb = knobVal
+  elseif knob = 10
+    gateLength = knobVal / 127 * 500 + 1
+  elseif knob >= 19 and knob <= 21
     trigVal = Round(knobVal / 127 * 16)
-    trigs[knob-11] = trigVal
+    trigs[knob-19] = trigVal
     if trigVal = 0
       LabelKnob knob, {-}
     else
       LabelKnob knob, {1/}, trigVal
     endif
     Call @MySetAllPulses    
-  elseif knob = 14
-    mutateProb = knobVal
-  elseif knob = 15
-    gateLength = knobVal / 127 * 500 + 1
   endif
 @End
 
@@ -155,18 +141,31 @@
 
 @MySetNoteKnob
   LabelKnob knob, {⚫️}, (NoteName noteVal, YES)
-  notes[knob] = noteVal
+  if knob > 7
+    notes[knob-3] = noteVal
+  else
+    notes[knob] = noteVal
+  endif
 @End
 
 @MySetNewStep
-  note = notes[newStep] 
+  note = notes[newStep]
   SendMIDINoteOn 0, note, 100
   SendMIDINoteOff 0, note, 0, gateLength
 
   if newStep <> lastStep
-    LabelKnob newStep, {🔴}, (NoteName note, YES)
+    if newStep > 7
+      LabelKnob newStep+3, {🔴}, (NoteName note, YES)
+    else
+      LabelKnob newStep, {🔴}, (NoteName note, YES)
+    endif
+
     note = notes[lastStep]
-    LabelKnob lastStep, {⚫️}, (NoteName note, YES)
+    if lastStep > 7
+      LabelKnob lastStep+3, {⚫️}, (NoteName note, YES)
+    else
+      LabelKnob lastStep, {⚫️}, (NoteName note, YES)
+    endif
   
     lastStep = newStep
   endif
@@ -179,9 +178,13 @@
 @OnMidiNoteOn
   if ShiftPressed 
     noteVal = MIDINote
-    knob = recStep
+    if recStep > 7
+      knob = recStep + 3
+    else
+      knob = recStep
+    endif
     SetKnobValue knob, noteVal 
     call @MySetNoteKnob
-    recStep = (recStep + 1) % 8
+    recStep = (recStep + 1) % 16
   endif 
 @End
