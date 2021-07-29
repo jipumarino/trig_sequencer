@@ -169,7 +169,7 @@
   if ShiftPressed 
     note = MIDINote
     knob = stepToKnob[recStep]
-    SetKnobValue knob, noteVal 
+    SetKnobValue knob, note 
     LabelKnob knob, {⚫️}, (NoteName note, YES)
     recStep = (recStep + 1) % 16
   endif 
