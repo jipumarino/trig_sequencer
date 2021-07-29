@@ -4,26 +4,18 @@
 
   ppqn = 384
 
+  // Maps step number (0-15) to knob number (first eight knobs in each row)
+  stepToKnob = [0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 13, 14, 15, 16, 17, 18, 19]
+
   SetMetroPPQN ppqn
 
   LabelKnobs { }
 
-  if Unassigned notes
-    noteVal = 64
-    for knob = 0 to 7
-      Call @MySetNoteKnob
-      knob = knob + 11
-      Call @MySetNoteKnob
-    endfor
-  else
-    for knob = 0 to 7
-      noteVal = notes[knob]
-      Call @MySetNoteKnob
-      knob = knob + 11
-      noteVal = notes[knob-3]
-      Call @MySetNoteKnob
-    endfor    
-  endif
+  for step = 0 to 15
+    knob = stepToKnob[step]
+    note = GetKnobValue knob
+    LabelKnob knob, {⚫️}, (NoteName note, YES)
+  endfor
 
   if Unassigned maxStep
     LabelKnob 8, {Length:16} 
@@ -75,8 +67,8 @@
   knobVal = (GetKnobValue knob)
 
   if (knob >= 0 and knob <= 7) or (knob >= 11 and knob <= 18)
-    noteVal = Round(knobVal)
-    Call @MySetNoteKnob
+    note = Round(knobVal)
+    LabelKnob knob, {⚫️}, (NoteName note, YES)
   elseif knob = 8
     maxStep = Round(knobVal / 127 * 14) + 2
     LabelKnob knob, {Length:}, maxStep
@@ -96,6 +88,12 @@
   endif
 @End
 
+
+// Sets the number of steps that each pulse position should move forward
+// for the current combination of trig knobs. A zero means that this pulse
+// position doesn't trigger a note. This is a very sparse array, but it's
+// the most performant solution I could find.
+// It needs to use two arrays because of the 1000-element array limit.
 @MySetAllPulses
   for i = 0 to 1000
     pulses1[i] = 0
@@ -120,6 +118,7 @@
   endfor
 @End
 
+// Calculates how many steps should the sequencer move forward
 @OnMetroPulse
   addStep = 0
   p = CurrentMetroPulse
@@ -130,61 +129,48 @@
   endif
 
   if addStep > 0
+    // If it's gonna trigger a note, it may move to a random step
     if mutateProb > Random 0, 127
       newStep = Random 0, maxStep-1
     else 
       newStep = (lastStep + addStep) % maxStep
     endif
-    Call @MySetNewStep
+    Call @MySendNextNote
   endif
 @End
 
-@MySetNoteKnob
-  LabelKnob knob, {⚫️}, (NoteName noteVal, YES)
-  if knob > 7
-    notes[knob-3] = noteVal
-  else
-    notes[knob] = noteVal
-  endif
-@End
 
-@MySetNewStep
-  note = notes[newStep]
+// expects newStep
+// sends MIDI note stored in that step
+// sets label with red icon
+// saves newStep in lastStep, so in the next
+// run step its icon can be cleared
+@MySendNextNote
+  note = GetKnobValue stepToKnob[newStep]
   SendMIDINoteOn 0, note, 100
   SendMIDINoteOff 0, note, 0, gateLength
 
+  // mutation can make it a step trigger twice in a row
+  // don't change the icon in that case
   if newStep <> lastStep
-    if newStep > 7
-      LabelKnob newStep+3, {🔴}, (NoteName note, YES)
-    else
-      LabelKnob newStep, {🔴}, (NoteName note, YES)
-    endif
-
-    note = notes[lastStep]
-    if lastStep > 7
-      LabelKnob lastStep+3, {⚫️}, (NoteName note, YES)
-    else
-      LabelKnob lastStep, {⚫️}, (NoteName note, YES)
-    endif
-  
+    LabelKnob stepToKnob[newStep], {🔴}, (NoteName note, YES)
+    LabelKnob stepToKnob[lastStep], {⚫️}, (NoteName (GetKnobValue stepToKnob[lastStep]), YES)
     lastStep = newStep
   endif
 @End
 
+// when holding the shift button, start recording
+// incoming notes from the beginning
 @OnShiftDown
   recStep = 0
 @End 
 
 @OnMidiNoteOn
   if ShiftPressed 
-    noteVal = MIDINote
-    if recStep > 7
-      knob = recStep + 3
-    else
-      knob = recStep
-    endif
+    note = MIDINote
+    knob = stepToKnob[recStep]
     SetKnobValue knob, noteVal 
-    call @MySetNoteKnob
+    LabelKnob knob, {⚫️}, (NoteName note, YES)
     recStep = (recStep + 1) % 16
   endif 
 @End
